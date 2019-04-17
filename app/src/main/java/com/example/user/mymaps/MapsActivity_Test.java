@@ -110,6 +110,8 @@ public class MapsActivity_Test extends AppCompatActivity implements GoogleMap.On
             }
         });
 
+
+
     }
 
 
@@ -279,7 +281,7 @@ public class MapsActivity_Test extends AppCompatActivity implements GoogleMap.On
 
                     //印出導航資訊
                     String howlong = point.get("howlong");
-
+                    //正則
                     howlong = howlong.replace("<b>", " ");
                     howlong = howlong.replace("</b>", " ");
                     howlong = howlong.replace("</div>", " ");
@@ -371,9 +373,11 @@ public class MapsActivity_Test extends AppCompatActivity implements GoogleMap.On
         @Override
         public void run() {
             mMap.clear();
-            String best;
-            best = LocationManager.NETWORK_PROVIDER;
-            mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+            mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            criteria = new Criteria();
+            criteria.setAccuracy(Criteria.ACCURACY_FINE);
+            String best = mLocationManager.getBestProvider(criteria, true);
             if (ActivityCompat.checkSelfPermission(MapsActivity_Test.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MapsActivity_Test.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
@@ -384,14 +388,25 @@ public class MapsActivity_Test extends AppCompatActivity implements GoogleMap.On
                 // for ActivityCompat#requestPermissions for more details.
                 return;
             }
-            mLocationManager.requestLocationUpdates(best, 0, 10, myListener);
-            Location location = mLocationManager.getLastKnownLocation(best);
-
-            if(location!=null){
-                dLat = location.getLatitude();
-                dLng = location.getLongitude();
-                latLng1 = new LatLng(dLat, dLng);
+            try {
+                mLocationManager.requestLocationUpdates(best,0 , 0, myListener);//十公尺偵測一次
+            }catch (Exception e){
+                Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
             }
+
+
+         /*  Location location = mLocationManager.getLastKnownLocation(best);//取得上次定位位置
+             mylocation=location;
+
+             if(location!=null)
+                Toast.makeText(getApplicationContext(), "正常!", Toast.LENGTH_SHORT).show();
+
+            try {
+                updateMyLocation(mylocation);
+            }catch (Exception e){
+                Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+            }*/
+
 
             //latLng1 = new LatLng(mMap.getCameraPosition().target.latitude,mMap.getCameraPosition().target.longitude);
 
@@ -411,11 +426,22 @@ public class MapsActivity_Test extends AppCompatActivity implements GoogleMap.On
         }
     };
 
+    void updateMyLocation(Location mylocation){
+
+        latLng1 = new LatLng(mylocation.getLatitude(),mylocation.getLongitude());
+        //dLat = (mylocation.getLatitude()); //取得緯度
+        //dLng = (mylocation.getLongitude());//取得經度
+        //LatLng nkut = new LatLng(dLat, dLng);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng1,15.0f));
+
+    }
+
+
     LocationListener myListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
-            dLat = location.getLatitude();
-            dLng = location.getLongitude();
+            mylocation = location;
+            updateMyLocation(mylocation);
         }
 
         @Override
