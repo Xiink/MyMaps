@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MyMaps</string>
+    <string name="title_activity_maps__test">Map</string>
+    <string name="tap_instructions1">tap_instructions</string>
+    <string name="move_the_camera2">move_the_camera</string>
+    <string name="button1">Button</string>
+</resources>
