@@ -377,7 +377,8 @@ public class MapsActivity_Test extends AppCompatActivity implements GoogleMap.On
             mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             criteria = new Criteria();
             criteria.setAccuracy(Criteria.ACCURACY_FINE);
-            String best = mLocationManager.getBestProvider(criteria, true);
+            String best = " ";
+            best = mLocationManager.getBestProvider(criteria, true);
             if (ActivityCompat.checkSelfPermission(MapsActivity_Test.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MapsActivity_Test.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
@@ -388,11 +389,19 @@ public class MapsActivity_Test extends AppCompatActivity implements GoogleMap.On
                 // for ActivityCompat#requestPermissions for more details.
                 return;
             }
-            try {
-                mLocationManager.requestLocationUpdates(best,0 , 0, myListener);//十公尺偵測一次
+
+
+            //Location  location = mLocationManager.getLastKnownLocation(best);
+
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10,myListener);//1秒 10公尺偵測
+
+
+          /*  try {
+                mLocationManager.requestLocationUpdates(best,1000 , 10, myListener);//十公尺偵測一次
             }catch (Exception e){
                 Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-            }
+                //button.setText(location+"");
+            }*/
 
 
          /*  Location location = mLocationManager.getLastKnownLocation(best);//取得上次定位位置
@@ -433,6 +442,7 @@ public class MapsActivity_Test extends AppCompatActivity implements GoogleMap.On
         //dLng = (mylocation.getLongitude());//取得經度
         //LatLng nkut = new LatLng(dLat, dLng);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng1,15.0f));
+        //button2.setText("No");
 
     }
 
@@ -440,23 +450,33 @@ public class MapsActivity_Test extends AppCompatActivity implements GoogleMap.On
     LocationListener myListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
-            mylocation = location;
+            if(location!=null) {
+                mylocation = location;
+                button.setText(location+"");
+            }
+            else
+                button.setText("NULL");
+
+            button.setText("TRUE");
+
+            mLocationManager.removeUpdates(myListener);
             updateMyLocation(mylocation);
+
         }
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
-
+            button.setText("TRUE");
         }
 
         @Override
         public void onProviderEnabled(String provider) {
-
+            button.setText("TRUE");
         }
 
         @Override
         public void onProviderDisabled(String provider) {
-
+            button.setText("TRUE");
         }
     };
 
