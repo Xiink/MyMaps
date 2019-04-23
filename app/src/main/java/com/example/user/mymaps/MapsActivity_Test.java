@@ -416,11 +416,9 @@ public class MapsActivity_Test extends AppCompatActivity implements GoogleMap.On
                 Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
             }*/
 
-
             //latLng1 = new LatLng(mMap.getCameraPosition().target.latitude,mMap.getCameraPosition().target.longitude);
             Location  location = mLocationManager.getLastKnownLocation(best);
             updateMyLocation(location);
-
             markerOptions1.position(new LatLng(latLng3.latitude, latLng3.longitude));
             markerOptions1.title("Destination!");
             markerOptions1.draggable(true);
@@ -433,7 +431,6 @@ public class MapsActivity_Test extends AppCompatActivity implements GoogleMap.On
             TaskRequestDirections taskRequestDirections = new TaskRequestDirections();
             taskRequestDirections.execute(url);
             handler.postDelayed(timerDirection, 500);
-
         }
     };
 
@@ -444,7 +441,6 @@ public class MapsActivity_Test extends AppCompatActivity implements GoogleMap.On
         //LatLng nkut = new LatLng(dLat, dLng);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng1,15.0f));
         //button2.setText("No");
-
     }
 
 
