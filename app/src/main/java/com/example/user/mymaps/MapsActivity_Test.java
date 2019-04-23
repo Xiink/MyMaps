@@ -393,7 +393,7 @@ public class MapsActivity_Test extends AppCompatActivity implements GoogleMap.On
 
             //Location  location = mLocationManager.getLastKnownLocation(best);
 
-            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10,myListener);//1秒 10公尺偵測
+           //mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10,myListener);//1秒 10公尺偵測
 
 
           /*  try {
@@ -418,6 +418,8 @@ public class MapsActivity_Test extends AppCompatActivity implements GoogleMap.On
 
 
             //latLng1 = new LatLng(mMap.getCameraPosition().target.latitude,mMap.getCameraPosition().target.longitude);
+            Location  location = mLocationManager.getLastKnownLocation(best);
+            updateMyLocation(location);
 
             markerOptions1.position(new LatLng(latLng3.latitude, latLng3.longitude));
             markerOptions1.title("Destination!");
@@ -436,7 +438,6 @@ public class MapsActivity_Test extends AppCompatActivity implements GoogleMap.On
     };
 
     void updateMyLocation(Location mylocation){
-
         latLng1 = new LatLng(mylocation.getLatitude(),mylocation.getLongitude());
         //dLat = (mylocation.getLatitude()); //取得緯度
         //dLng = (mylocation.getLongitude());//取得經度
